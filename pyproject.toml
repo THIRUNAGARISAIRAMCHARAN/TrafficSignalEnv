@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.scripts]
-server = "app:main"
+server = "server.app:main"
 
 [project.urls]
 Homepage = "https://huggingface.co/spaces/thirunagarisairamcharan/TrafficSignalEnv"
@@ -34,4 +34,4 @@ py-modules = ["app"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["env*"]
+include = ["env*", "server*"]

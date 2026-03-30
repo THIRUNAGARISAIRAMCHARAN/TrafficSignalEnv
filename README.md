@@ -76,7 +76,7 @@ The step reward `value` is the sum of these components.
 
 ```bash
 pip install -r requirements.txt
-uvicorn app:app --port 7860
+uvicorn server.app:app --port 7860
 curl -X POST localhost:7860/reset -d '{}'
 ```
 
