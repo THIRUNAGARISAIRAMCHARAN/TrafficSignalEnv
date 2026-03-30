@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional
 
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import Body, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -54,10 +54,12 @@ def health() -> dict:
 
 
 @app.post("/reset")
-def reset(body: ResetRequest) -> dict:
+def reset(body: Optional[ResetRequest] = Body(default=None)) -> dict:
     global current_task_id, episode_data
 
     episode_data = _empty_episode_data()
+    if body is None:
+        body = ResetRequest()
     current_task_id = body.task_id or "task1"
 
     config = TASK_CONFIGS.get(current_task_id, TASK_CONFIGS["task1"])
