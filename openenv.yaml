@@ -1,0 +1,82 @@
+name: TrafficSignalEnv
+version: '1.0.0'
+description: >
+  An AI environment for traffic signal control.
+  The agent manages intersection signals to optimize
+  vehicle flow, minimize wait times, and respond to
+  emergency vehicles across 1-4 intersections.
+author: thirunagarisairamcharan
+tags:
+  - traffic
+  - optimization
+  - urban
+  - real-world
+  - openenv
+
+endpoints:
+  base_url: http://localhost:7860
+  reset: POST /reset
+  step:  POST /step
+  state: GET /state
+  health: GET /health
+
+observation_space:
+  type: object
+  description: Current state of all traffic intersections
+  fields:
+    - name: intersections
+      type: array
+      description: List of intersection state objects
+    - name: step_count
+      type: integer
+      description: Current step number
+    - name: elapsed_time
+      type: float
+      description: Seconds elapsed in episode
+    - name: total_waiting_cars
+      type: integer
+      description: Total cars waiting across all intersections
+    - name: emergency_active
+      type: boolean
+      description: Whether an emergency vehicle is in the system
+
+action_space:
+  type: object
+  description: Traffic signal control command
+  fields:
+    - name: intersection_id
+      type: integer
+      description: Which intersection to control (0-indexed)
+    - name: command
+      type: string
+      enum: [extend_green, switch_phase, emergency_override]
+      description: The control command to execute
+    - name: duration
+      type: number
+      optional: true
+      description: Duration in seconds for extend_green command
+
+tasks:
+  - id: task1
+    name: Single Intersection Control
+    difficulty: easy
+    max_steps: 300
+    description: Control one intersection with moderate traffic
+  - id: task2
+    name: Multi-Intersection Coordination
+    difficulty: medium
+    max_steps: 300
+    description: Coordinate four intersections simultaneously
+  - id: task3
+    name: Rush Hour Emergency Response
+    difficulty: hard
+    max_steps: 300
+    description: High traffic plus emergency vehicle at step 100
+
+reward:
+  range: [-500, 500]
+  description: >
+    Per-step reward: throughput_bonus (0.5/car cleared)
+    minus wait_penalty (0.1/queued car) minus
+    starvation_penalty (5 per queue over 20 cars).
+    Emergency bonus: +50 when cleared, -1/step while active.
