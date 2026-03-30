@@ -133,5 +133,10 @@ def reset_with_task(task_id: str) -> dict:
     return obs.model_dump()
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Console entrypoint for OpenEnv / `[project.scripts]` (multi-mode deployment)."""
     uvicorn.run("app:app", host="0.0.0.0", port=7860, reload=False)
+
+
+if __name__ == "__main__":
+    main()
